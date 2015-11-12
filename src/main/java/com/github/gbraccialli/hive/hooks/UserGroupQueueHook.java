@@ -21,7 +21,7 @@ public class UserGroupQueueHook extends AbstractSemanticAnalyzerHook {
 	private static final String TEZ_QUEUE_NAME_PROPERTY = "tez.queue.name";
 	private static final String HIVE_EXECUTION_ENGINE_PROPERTY = "hive.execution.engine";
 
-	private static final Log LOG = LogFactory.getLog(QueueHandlerHiveDriverRunHook.class);
+	private static final Log LOG = LogFactory.getLog(UserGroupQueueHook.class);
 	
 	@Override
 	public void postAnalyze(HiveSemanticAnalyzerHookContext arg0,
