@@ -1,11 +1,16 @@
 package com.github.gbraccialli.hive.udf;
 
 import java.util.ArrayList;
+
+import org.apache.hadoop.mapred.Counters;
+import org.apache.hadoop.mapred.Reporter;
+
 import java.util.Collections;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.hive.ql.exec.Description;
+import org.apache.hadoop.hive.ql.exec.MapredContext;
 import org.apache.hadoop.hive.ql.exec.UDFArgumentException;
 import org.apache.hadoop.hive.ql.metadata.HiveException;
 import org.apache.hadoop.hive.ql.udf.generic.GenericUDF;
@@ -39,6 +44,14 @@ public class BalanceFromRechargesAndOrders extends GenericUDF {
 	private String previousKey = "";
 	private ArrayList<SortableRecord> credits;
 
+    private MapredContext context;
+
+
+    @Override
+    public void configure(MapredContext context) {
+      this.context = context;
+    }
+    
 	@Override
 	public ObjectInspector initialize(ObjectInspector[] arguments)
 			throws UDFArgumentException {
@@ -102,6 +115,7 @@ public class BalanceFromRechargesAndOrders extends GenericUDF {
 	@Override
 	public Object evaluate(DeferredObject[] arguments) throws HiveException {
 
+		//counters();             
 		//LOG.error("evaluate guilherme");
 		/*
 		ArrayList record1 = new ArrayList(3);
@@ -168,7 +182,7 @@ public class BalanceFromRechargesAndOrders extends GenericUDF {
 		
 		ArrayList returnObj = new ArrayList(2);
 		
-		if (credits.size() > 0){
+		if (credits !=null && credits.size() > 0){
 			SortableRecord credit = credits.get(0);
 			while (credit != null && timestamp.compareTo(credit.getTimestamp()) >= 0 && remainingValue > 0){
 				if (remainingValue >= credit.getBalance()){
@@ -198,6 +212,20 @@ public class BalanceFromRechargesAndOrders extends GenericUDF {
 		return returnObj;
 
 	}
+	
+	/*
+	private void counters(){
+		
+	    Reporter reporter = context.getReporter();
+	    Counters.Counter counter = reporter.getCounter(
+	        "teste", "teste");
+	    counter.increment(222);
+	    reporter.incrCounter("teste", "teste", 222);
+	    reporter.incrCounter("org.apache.tez.common.counters.DAGCounter", "AM_GC_TIME_MILLIS", 22200);
+	    reporter.incrCounter("org.apache.tez.common.counters.DAGCounter", "AM_GC_TIME_MILLISN", 333);
+	    context.setReporter(reporter);
+	}
+	*/
 
 	private void emitValues(double value, double balance, int originalId, ArrayList returnObj, Object array) {
 		

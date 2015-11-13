@@ -20,7 +20,6 @@ hive>   maps map<string,string>
 hive> )
 hive> ROW FORMAT SERDE 'com.github.gbraccialli.hive.serde.NKeys_MapKeyValue'
 hive> WITH SERDEPROPERTIES (
-hive>   "num.key.columns" = "3",
 hive>   "delimiter" = ","
 hive> )
 hive> LOCATION '/tmp/testserde/';
@@ -43,7 +42,6 @@ create external table testserde (
 )
 ROW FORMAT SERDE 'com.github.gbraccialli.hive.serde.NKeys_MapKeyValue'
 WITH SERDEPROPERTIES (
- "num.key.columns" = "3",
  "delimiter" = ","
 )
 LOCATION '/tmp/testserde/';
