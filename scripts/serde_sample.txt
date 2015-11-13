@@ -1,0 +1,52 @@
+wget https://github.com/gbraccialli/HiveUtils/raw/master/target/HiveUtils-1.0-SNAPSHOT-jar-with-dependencies.jar -O /tmp/HiveUtils-1.0-SNAPSHOT-jar-with-dependencies.jar
+
+echo "a,b,c,adsfa,adfa" > /tmp/testserde.txt
+echo "1,2,3,asdfasdf,sdfasd" >> /tmp/testserde.txt
+echo "4,5,6,adfas,adf,d" >> /tmp/testserde.txt
+
+hadoop fs -mkdir /tmp/testserde/
+hadoop fs -put -f /tmp/testserde.txt /tmp/testserde/
+
+hive
+
+hive> add jar /tmp/HiveUtils-1.0-SNAPSHOT-jar-with-dependencies.jar;
+
+hive> drop table testserde;
+hive> create external table testserde (
+hive>   field1 string,
+hive>   field2 int,
+hive>   field3 double,
+hive>   maps map<string,string>
+hive> )
+hive> ROW FORMAT SERDE 'com.github.gbraccialli.hive.serde.NKeys_MapKeyValue'
+hive> WITH SERDEPROPERTIES (
+hive>   "num.key.columns" = "3",
+hive>   "delimiter" = ","
+hive> )
+hive> LOCATION '/tmp/testserde/';
+
+
+hive> select * from testserde;
+
+or
+
+hive
+
+add jar /tmp/HiveUtils-1.0-SNAPSHOT-jar-with-dependencies.jar;
+
+drop table testserde;
+create external table testserde (
+ field1 string,
+ field2 int,
+ field3 double,
+ maps map<string,string>
+)
+ROW FORMAT SERDE 'com.github.gbraccialli.hive.serde.NKeys_MapKeyValue'
+WITH SERDEPROPERTIES (
+ "num.key.columns" = "3",
+ "delimiter" = ","
+)
+LOCATION '/tmp/testserde/';
+
+
+select * from testserde;
