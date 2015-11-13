@@ -2,9 +2,6 @@ package com.github.gbraccialli.hive.udf;
 
 import java.util.ArrayList;
 
-import org.apache.hadoop.mapred.Counters;
-import org.apache.hadoop.mapred.Reporter;
-
 import java.util.Collections;
 
 import org.apache.commons.logging.Log;
