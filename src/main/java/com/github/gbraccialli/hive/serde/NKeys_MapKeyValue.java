@@ -143,7 +143,7 @@ public class NKeys_MapKeyValue extends AbstractSerDe {
 	public Object deserialize(Writable blob) throws SerDeException {
 
 		Text rowText = (Text) blob;
-		String columns[] = rowText.toString().split(Pattern.quote("|"));
+		String columns[] = rowText.toString().split(Pattern.quote(delimiter));
 
 		for (int keyId = 0; keyId < numColumns; keyId++) {
 			//TODO this version consider last column will be a map<string,string>, need to add code to validate that and also to allow map<any-primitive-type,any-primitive-type>
