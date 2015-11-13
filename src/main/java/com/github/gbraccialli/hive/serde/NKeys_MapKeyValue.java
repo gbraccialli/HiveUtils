@@ -39,17 +39,15 @@ import com.google.common.collect.Lists;
 
 @SerDeSpec(schemaProps = {
 		serdeConstants.LIST_COLUMNS, serdeConstants.LIST_COLUMN_TYPES,
-		NKeys_MapKeyValue.NUM_KEY_COLUMNS, NKeys_MapKeyValue.DELIMITER, })
+		NKeys_MapKeyValue.DELIMITER, })
 public class NKeys_MapKeyValue extends AbstractSerDe {
 
 	public static final Logger LOG = LoggerFactory.getLogger(NKeys_MapKeyValue.class.getName());
 
-	public static final String NUM_KEY_COLUMNS = "num.key.columns";
 	public static final String DELIMITER = "delimiter";
 
 	int numColumns;
 	String delimiter;
-	int numKeyColumns;
 
 	Pattern inputPattern;
 
@@ -69,20 +67,9 @@ public class NKeys_MapKeyValue extends AbstractSerDe {
 		// We can get the table definition from tbl.
 
 		// Read the configuration parameters
-		numKeyColumns = Integer.valueOf(tbl.getProperty(NUM_KEY_COLUMNS));
 		delimiter = tbl.getProperty(DELIMITER);
 		String columnNameProperty = tbl.getProperty(serdeConstants.LIST_COLUMNS);
 		String columnTypeProperty = tbl.getProperty(serdeConstants.LIST_COLUMN_TYPES);
-
-
-		// Parse the configuration parameters
-		if (numKeyColumns != 0) {
-			//TODO ERROR HANDLEING 
-		} else {
-			inputPattern = null;
-			throw new SerDeException(
-					"This table does not have valid value for serde property \"num.key.columns\"!");
-		}
 
 
 		List<String> columnNames = Arrays.asList(columnNameProperty.split(","));
